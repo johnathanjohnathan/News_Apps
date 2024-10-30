@@ -27,7 +27,6 @@ export const createToken = () => {
     process.env.JWT_SECRET_KEY,
     { expiresIn: "2h" }
   );
-
   return token;
 };
 
@@ -37,6 +36,19 @@ export const getTestUser = async () => {
       username: "test",
     },
   });
-
   return user;
+};
+
+export const removeNewsCategory = async () => {
+  await prismaClient.category.deleteMany();
+};
+
+export const createNewsCategory = async () => {
+  const newsCategory = await prismaClient.category.create({
+    data: {
+      name: "Test Category",
+      description: "Test Description",
+    },
+  });
+  return newsCategory;
 };
