@@ -15,4 +15,6 @@ const editNewsValidation = Joi.object({
   creatorId: Joi.number().positive().required(),
 });
 
-export { createNewsValidation, editNewsValidation };
+const removeNewsValidation = Joi.number().positive().required();
+
+export { createNewsValidation, editNewsValidation, removeNewsValidation };

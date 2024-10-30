@@ -43,7 +43,6 @@ const edit = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    console.log(req.params, "controllerrr");
     const result = await newsCategoryService.remove(req.user, req.params.id);
     res.status(200).json({
       data: "OK",

@@ -40,4 +40,15 @@ const edit = async (req, res, next) => {
   }
 };
 
-export default { create, edit };
+const remove = async (req, res, next) => {
+  try {
+    const result = await newsService.remove(req.user, req.params.id);
+    res.status(200).json({
+      data: "OK",
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { create, edit, remove };

@@ -30,14 +30,14 @@ describe("POST /api/news/create", function () {
       .post("/api/news/create")
       .set("Authorization", "Bearer " + token)
       .send({
-        title: "Test Title",
-        content: "Test Content",
+        title: "test title",
+        content: "test content",
         categoryId: newsCategory.id,
       });
     expect(result.status).toBe(200);
     expect(result.body.data.id).toBeDefined();
-    expect(result.body.data.title).toBe("Test Title");
-    expect(result.body.data.content).toBe("Test Content");
+    expect(result.body.data.title).toBe("test title");
+    expect(result.body.data.content).toBe("test content");
     expect(result.body.data.categoryId).toBeDefined();
   });
 
@@ -65,8 +65,8 @@ describe("POST /api/news/create", function () {
       .post("/api/news/create")
       .set("Authorization", "Bearer " + token)
       .send({
-        title: "Test Title",
-        content: "Test Content",
+        title: "test title",
+        content: "test content",
         categoryId: newsCategory.id,
       });
     expect(result.status).toBe(401);
@@ -93,14 +93,14 @@ describe("PUT /api/news/edit/:id", function () {
       .put(`/api/news/edit/${news.id}`)
       .set("Authorization", "Bearer " + token)
       .send({
-        title: "Test Title",
-        content: "Test Content",
+        title: "test title",
+        content: "test content",
         categoryId: newsCategory.id,
       });
     expect(result.status).toBe(200);
     expect(result.body.data.id).toBeDefined();
-    expect(result.body.data.title).toBe("Test Title");
-    expect(result.body.data.content).toBe("Test Content");
+    expect(result.body.data.title).toBe("test title");
+    expect(result.body.data.content).toBe("test content");
     expect(result.body.data.categoryId).toBeDefined();
   });
 
@@ -130,11 +130,45 @@ describe("PUT /api/news/edit/:id", function () {
       .put(`/api/news/edit/${news.id}`)
       .set("Authorization", "Bearer " + token)
       .send({
-        title: "Test Title",
-        content: "Test Content",
+        title: "test title",
+        content: "test content",
         categoryId: newsCategory.id,
       });
     expect(result.status).toBe(401);
+    expect(result.body.errors).toBeDefined();
+  });
+});
+
+describe("DELETE /api/news/delete/:id", function () {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeNews();
+    await removeNewsCategory();
+    await removeTestUser();
+  });
+  it("should delete news", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .delete(`/api/news/delete/${news.id}`)
+      .set("Authorization", "Bearer " + token);
+    expect(result.status).toBe(200);
+    expect(result.body.data).toBe("OK");
+  });
+
+  it("should reject delete news if id invalid", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .delete(`/api/news/delete/1`)
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(404);
     expect(result.body.errors).toBeDefined();
   });
 });

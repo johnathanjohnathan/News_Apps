@@ -22,5 +22,6 @@ userRouter.delete(
 // News API
 userRouter.post("/api/news/create", newsController.create);
 userRouter.put("/api/news/edit/:id", newsController.edit);
+userRouter.delete("/api/news/delete/:id", newsController.remove);
 
 export { userRouter };

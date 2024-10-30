@@ -8,14 +8,25 @@ import { ResponseError } from "../error/response-error.js";
 import { prismaClient } from "../application/database.js";
 
 const create = async (user, request) => {
-  const newsCategory = validate(createNewsCategoryValidation, request);
+  const newNewsCategoryRequest = validate(
+    createNewsCategoryValidation,
+    request
+  );
 
   if (user.role !== "admin") {
     throw new ResponseError(401, "Unauthorized");
   }
 
+  const existNewsCategory = await prismaClient.category.findFirst({
+    where: { name: newNewsCategoryRequest.name },
+  });
+
+  if (existNewsCategory) {
+    throw new ResponseError(400, "News Category already exists");
+  }
+
   const newNewsCategory = await prismaClient.category.create({
-    data: newsCategory,
+    data: newNewsCategoryRequest,
   });
 
   return newNewsCategory;
