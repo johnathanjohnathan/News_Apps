@@ -3,11 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const removeTestUser = async () => {
-  await prismaClient.user.deleteMany({
-    where: {
-      username: "test",
-    },
-  });
+  await prismaClient.user.deleteMany();
 };
 
 export const createTestUser = async () => {
@@ -23,7 +19,7 @@ export const createTestUser = async () => {
 
 export const createToken = () => {
   const token = jwt.sign(
-    { username: "test", roloe: "admin" },
+    { username: "test", role: "admin" },
     process.env.JWT_SECRET_KEY,
     { expiresIn: "2h" }
   );
@@ -46,9 +42,36 @@ export const removeNewsCategory = async () => {
 export const createNewsCategory = async () => {
   const newsCategory = await prismaClient.category.create({
     data: {
-      name: "Test Category",
-      description: "Test Description",
+      name: "test category",
+      description: "test description",
     },
   });
   return newsCategory;
+};
+
+export const removeNews = async () => {
+  await prismaClient.news.deleteMany();
+};
+
+export const createNews = async () => {
+  const news = await prismaClient.news.create({
+    data: {
+      title: "test title",
+      content: "test content",
+      category: {
+        create: {
+          name: "new test category",
+          description: "new test description",
+        },
+      },
+      creator: {
+        create: {
+          username: "new test",
+          password: await bcrypt.hash("rahasia", 10),
+          role: "admin",
+        },
+      },
+    },
+  });
+  return news;
 };

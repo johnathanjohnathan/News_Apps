@@ -26,13 +26,13 @@ describe("POST /api/news-category/create", function () {
       .post("/api/news-category/create")
       .set("Authorization", "Bearer " + token)
       .send({
-        name: "Test Category",
-        description: "Test Description",
+        name: "test category",
+        description: "test description",
       });
     expect(result.status).toBe(200);
     expect(result.body.data.id).toBeDefined();
-    expect(result.body.data.name).toBe("Test Category");
-    expect(result.body.data.description).toBe("Test Description");
+    expect(result.body.data.name).toBe("test category");
+    expect(result.body.data.description).toBe("test description");
   });
 
   it("should reject if request is not valid", async () => {
@@ -102,13 +102,13 @@ describe("PUT /api/news-category/edit/:id", function () {
       .put(`/api/news-category/edit/${newsCategory.id}`)
       .set("Authorization", "Bearer " + token)
       .send({
-        name: "Edit Category",
-        description: "Edit Description",
+        name: "edit category",
+        description: "edit description",
       });
 
     expect(result.status).toBe(200);
-    expect(result.body.data.name).toBe("Edit Category");
-    expect(result.body.data.description).toBe("Edit Description");
+    expect(result.body.data.name).toBe("edit category");
+    expect(result.body.data.description).toBe("edit description");
   });
 
   it("should reject edit news category if data invalid", async () => {

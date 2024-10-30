@@ -2,6 +2,7 @@ import express from "express";
 import { authMiddleware } from "../middleware/auth-middleware.js";
 import userController from "../controller/user-controller.js";
 import newsCategoryController from "../controller/news-category-controller.js";
+import newsController from "../controller/news-controller.js";
 
 const userRouter = new express.Router();
 userRouter.use(authMiddleware);
@@ -17,5 +18,9 @@ userRouter.delete(
   "/api/news-category/delete/:id",
   newsCategoryController.remove
 );
+
+// News API
+userRouter.post("/api/news/create", newsController.create);
+userRouter.put("/api/news/edit/:id", newsController.edit);
 
 export { userRouter };

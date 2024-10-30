@@ -38,9 +38,8 @@ model Category {
 
 model News {
   id            Int      @id @default(autoincrement())
-  title         String
+  title         String   @unique
   content       String
-  publishedDate DateTime
   categoryId    Int
   creatorId     Int
   createdAt     DateTime @default(now()) @db.Timestamp(6)
