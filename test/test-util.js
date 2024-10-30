@@ -18,15 +18,25 @@ export const createTestUser = async () => {
       role: "admin",
     },
   });
-  return user.id;
+  return user;
 };
 
 export const createToken = () => {
   const token = jwt.sign(
-    { username: "test", email: "test@example.com" },
+    { username: "test", roloe: "admin" },
     process.env.JWT_SECRET_KEY,
-    { expiresIn: "1h" }
+    { expiresIn: "2h" }
   );
 
   return token;
+};
+
+export const getTestUser = async () => {
+  const user = await prismaClient.user.findUnique({
+    where: {
+      username: "test",
+    },
+  });
+
+  return user;
 };

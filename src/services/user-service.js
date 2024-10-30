@@ -1,5 +1,6 @@
 import { validate } from "../validation/validation.js";
 import {
+  getUserValidation,
   loginUserValidation,
   registerUserValidation,
 } from "../validation/user-validation.js";
@@ -76,4 +77,30 @@ const login = async (request) => {
   });
 };
 
-export default { register, login };
+const logout = async (request) => {
+  const username = validate(getUserValidation, request);
+
+  const user = await prismaClient.user.findUnique({
+    where: {
+      username: username,
+    },
+  });
+
+  if (!user) {
+    throw new ResponseError(401, "Invalid credentials");
+  }
+
+  return prismaClient.user.update({
+    data: {
+      token: null,
+    },
+    where: {
+      username: username,
+    },
+    select: {
+      username: true,
+    },
+  });
+};
+
+export default { register, login, logout };

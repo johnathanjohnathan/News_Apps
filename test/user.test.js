@@ -1,8 +1,14 @@
 import supertest from "supertest";
 import { web } from "../src/application/web.js";
 import { logger } from "../src/application/logging.js";
-import { createTestUser, removeTestUser } from "./test-util.js";
+import {
+  createTestUser,
+  createToken,
+  getTestUser,
+  removeTestUser,
+} from "./test-util.js";
 import bcrypt from "bcrypt";
+import { prismaClient } from "../src/application/database.js";
 
 describe("POST /api/users/signup", function () {
   afterEach(async () => {
@@ -107,5 +113,55 @@ describe("POST /api/users/login", function () {
 
     expect(result.status).toBe(401);
     expect(result.body.errors).toBeDefined();
+  });
+});
+
+describe("DELETE /api/users/logout", function () {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeTestUser();
+  });
+
+  it("should can logout", async () => {
+    const token = createToken();
+    await prismaClient.user.update({
+      data: {
+        token: token,
+      },
+      where: {
+        username: "test",
+      },
+    });
+    const result = await supertest(web)
+      .delete("/api/users/logout")
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(200);
+
+    const user = await getTestUser();
+    expect(user.token).toBeNull();
+  });
+
+  it("should can logout", async () => {
+    const token = createToken();
+    await prismaClient.user.update({
+      data: {
+        token: token,
+      },
+      where: {
+        username: "test",
+      },
+    });
+    const result = await supertest(web)
+      .delete("/api/users/logout")
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(200);
+
+    const user = await getTestUser();
+    expect(user.token).toBeNull();
   });
 });
