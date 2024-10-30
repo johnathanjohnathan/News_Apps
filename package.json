@@ -13,6 +13,7 @@
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "description": "",
   "dependencies": {
     "@prisma/client": "^5.21.1",
