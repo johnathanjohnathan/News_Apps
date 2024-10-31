@@ -51,4 +51,26 @@ const remove = async (req, res, next) => {
   }
 };
 
-export default { create, edit, remove };
+const getAll = async (req, res, next) => {
+  try {
+    const result = await newsService.getAll(req.user);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+const getDetail = async (req, res, next) => {
+  try {
+    const result = await newsService.getDetail(req.user, req.params.id);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { create, edit, remove, getAll, getDetail };

@@ -172,3 +172,62 @@ describe("DELETE /api/news/delete/:id", function () {
     expect(result.body.errors).toBeDefined();
   });
 });
+
+describe("GET /api/news", function () {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeNews();
+    await removeNewsCategory();
+    await removeTestUser();
+  });
+  it("should get all news", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .get("/api/news")
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(200);
+    expect(result.body.data).toBeDefined();
+  });
+});
+
+describe("GET /api/news/:id", function () {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeNews();
+    await removeNewsCategory();
+    await removeTestUser();
+  });
+  it("should get news detail", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .get(`/api/news/${news.id}`)
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.title).toBe("test title");
+    expect(result.body.data.content).toBe("test content");
+  });
+
+  it("should reject get news detail if id invalid", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .get(`/api/news/1`)
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(404);
+    expect(result.body.errors).toBeDefined();
+  });
+});

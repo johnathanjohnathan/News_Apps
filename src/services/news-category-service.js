@@ -37,8 +37,15 @@ const get = async (user, request) => {
     throw new ResponseError(401, "Unauthorized");
   }
 
-  const NewsCategory = await prismaClient.category.findMany();
-  return NewsCategory;
+  const newsCategory = await prismaClient.category.findMany();
+
+  if (newsCategory.length === 0) {
+    return {
+      message: "No news category available.",
+      data: [],
+    };
+  }
+  return newsCategory;
 };
 
 const edit = async (user, request) => {

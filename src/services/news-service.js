@@ -4,6 +4,7 @@ import { prismaClient } from "../application/database.js";
 import {
   createNewsValidation,
   editNewsValidation,
+  getNewsDetailValidation,
   removeNewsValidation,
 } from "../validation/news-validation.js";
 
@@ -32,8 +33,6 @@ const create = async (user, request) => {
 const edit = async (user, request) => {
   const editNewsRequest = validate(editNewsValidation, request);
 
-  console.log(editNewsRequest, "newsssssssssssssss");
-
   if (user.role !== "admin") {
     throw new ResponseError(401, "Unauthorized");
   }
@@ -41,8 +40,6 @@ const edit = async (user, request) => {
   const existNews = await prismaClient.news.findFirst({
     where: { title: editNewsRequest.title },
   });
-
-  console.log(existNews, "newsssssssssssssss");
 
   if (!existNews) {
     throw new ResponseError(
@@ -84,4 +81,34 @@ const remove = async (user, request) => {
   });
 };
 
-export default { create, edit, remove };
+const getAll = async (user, request) => {
+  const existNews = await prismaClient.news.findMany();
+
+  if (existNews.length === 0) {
+    return {
+      message: "No news available.",
+      data: [],
+    };
+  }
+
+  return existNews;
+};
+
+const getDetail = async (user, request) => {
+  const newsDetailRequest = validate(getNewsDetailValidation, request);
+
+  const existNewsDetail = await prismaClient.news.findFirst({
+    where: { id: newsDetailRequest },
+  });
+
+  if (!existNewsDetail) {
+    throw new ResponseError(
+      404,
+      "News with the same title already does not exists"
+    );
+  }
+
+  return existNewsDetail;
+};
+
+export default { create, edit, remove, getAll, getDetail };

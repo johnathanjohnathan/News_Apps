@@ -17,4 +17,11 @@ const editNewsValidation = Joi.object({
 
 const removeNewsValidation = Joi.number().positive().required();
 
-export { createNewsValidation, editNewsValidation, removeNewsValidation };
+const getNewsDetailValidation = Joi.number().positive().required();
+
+export {
+  createNewsValidation,
+  editNewsValidation,
+  removeNewsValidation,
+  getNewsDetailValidation,
+};
