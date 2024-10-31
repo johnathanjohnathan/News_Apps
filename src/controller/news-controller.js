@@ -73,4 +73,16 @@ const getDetail = async (req, res, next) => {
   }
 };
 
-export default { create, edit, remove, getAll, getDetail };
+const search = async (req, res, next) => {
+  try {
+    const { title } = req.query;
+    const result = await newsService.search(req.user, title);
+    res.status(200).json({
+      data: result,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+
+export default { create, edit, remove, getAll, getDetail, search };

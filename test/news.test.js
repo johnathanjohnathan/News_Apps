@@ -173,7 +173,7 @@ describe("DELETE /api/news/delete/:id", function () {
   });
 });
 
-describe("GET /api/news", function () {
+describe("GET /api/news/all", function () {
   beforeEach(async () => {
     await createTestUser();
   });
@@ -188,7 +188,7 @@ describe("GET /api/news", function () {
     const news = await createNews();
 
     const result = await supertest(web)
-      .get("/api/news")
+      .get("/api/news/all")
       .set("Authorization", "Bearer " + token);
 
     expect(result.status).toBe(200);
@@ -229,5 +229,53 @@ describe("GET /api/news/:id", function () {
 
     expect(result.status).toBe(404);
     expect(result.body.errors).toBeDefined();
+  });
+});
+
+describe("GET /api/news/search", function () {
+  beforeEach(async () => {
+    await createTestUser();
+  });
+
+  afterEach(async () => {
+    await removeNews();
+    await removeNewsCategory();
+    await removeTestUser();
+  });
+  it("should get news detail", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .get(`/api/news/search?title=test title`)
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(200);
+    expect(result.body.data[0].title).toBe("test title");
+    expect(result.body.data[0].content).toBe("test content");
+  });
+
+  it("should reject get news detail if req query invalid", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .get(`/api/news/search`)
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(400);
+    expect(result.body.errors).toBeDefined();
+  });
+
+  it("should get message if no matched news", async () => {
+    const token = createToken();
+    const news = await createNews();
+
+    const result = await supertest(web)
+      .get(`/api/news/search?title=salah`)
+      .set("Authorization", "Bearer " + token);
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.message).toBe("No news available.");
   });
 });

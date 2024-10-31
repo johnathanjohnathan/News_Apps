@@ -6,6 +6,7 @@ import {
   editNewsValidation,
   getNewsDetailValidation,
   removeNewsValidation,
+  searchNewsValidation,
 } from "../validation/news-validation.js";
 
 const create = async (user, request) => {
@@ -111,4 +112,26 @@ const getDetail = async (user, request) => {
   return existNewsDetail;
 };
 
-export default { create, edit, remove, getAll, getDetail };
+const search = async (user, request) => {
+  const searchNewsRequest = validate(searchNewsValidation, request);
+
+  if (!searchNewsRequest) {
+    throw new ResponseError(400, "Invalid search query");
+  }
+
+  const news = await prismaClient.news.findMany({
+    where: {
+      title: { contains: searchNewsRequest },
+    },
+  });
+
+  if (news.length === 0) {
+    return {
+      message: "No news available.",
+      data: [],
+    };
+  }
+  return news;
+};
+
+export default { create, edit, remove, getAll, getDetail, search };

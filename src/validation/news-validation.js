@@ -19,9 +19,12 @@ const removeNewsValidation = Joi.number().positive().required();
 
 const getNewsDetailValidation = Joi.number().positive().required();
 
+const searchNewsValidation = Joi.string().optional();
+
 export {
   createNewsValidation,
   editNewsValidation,
   removeNewsValidation,
   getNewsDetailValidation,
+  searchNewsValidation,
 };
