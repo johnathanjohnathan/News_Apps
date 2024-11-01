@@ -53,12 +53,6 @@ This is a simple API for a news portal application built with Express.js and Pos
    npx prisma generate
    ```
 
-5. Build and start the application:
-   ```bash
-   npm run build
-   npm start
-   ```
-
 ### Running the Application
 To start the server, use:
 ```bash
