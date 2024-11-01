@@ -1,4 +1,4 @@
-import { validate } from "../validation/validation";
+import { validate } from "../validation/validation.js";
 import { ResponseError } from "../error/response-error.js";
 import { prismaClient } from "../application/database.js";
 import {
@@ -39,13 +39,13 @@ const edit = async (user, request) => {
   }
 
   const existNews = await prismaClient.news.findFirst({
-    where: { title: editNewsRequest.title },
+    where: { id: editNewsRequest.id },
   });
 
   if (!existNews) {
     throw new ResponseError(
       404,
-      "News with the same title already does not exists"
+      "News does not exists"
     );
   }
 
@@ -73,7 +73,7 @@ const remove = async (user, request) => {
   if (!existNews) {
     throw new ResponseError(
       404,
-      "News with the same title already does not exists"
+      "News does not exists"
     );
   }
 
@@ -105,7 +105,7 @@ const getDetail = async (user, request) => {
   if (!existNewsDetail) {
     throw new ResponseError(
       404,
-      "News with the same title already does not exists"
+      "News does not exists"
     );
   }
 

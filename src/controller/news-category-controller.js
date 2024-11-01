@@ -1,4 +1,4 @@
-import newsCategoryService from "../services/news-category-service";
+import newsCategoryService from "../services/news-category-service.js";
 
 const create = async (req, res, next) => {
   try {

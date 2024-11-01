@@ -1,9 +1,9 @@
-import { validate } from "../validation/validation";
+import { validate } from "../validation/validation.js";
 import {
   createNewsCategoryValidation,
   editNewsCategoryValidation,
   removeNewsCategoryValidation,
-} from "../validation/news-category-validation";
+} from "../validation/news-category-validation.js";
 import { ResponseError } from "../error/response-error.js";
 import { prismaClient } from "../application/database.js";
 

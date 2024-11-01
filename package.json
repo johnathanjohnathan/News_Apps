@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest -i",
-    "start": "nodemon serc/main.js"
+    "start": "nodemon src/main.js"
   },
   "jest": {
     "transform": {
